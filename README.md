@@ -14,7 +14,18 @@ Here's the basic flow:
 5. Sorts everyone by their total score (highest first)
 6. Sends the final leaderboard to the POST API
 
-## How to run
+## Try the offline demo
+
+With Java 11 or newer, run these commands from the repository root.
+
+```sh
+javac --release 11 -d out src/QuizLeaderboard.java
+java -cp out QuizLeaderboard --demo
+```
+
+The demo feeds two sample responses through the same scoring code as the live mode. Ada's first-round event appears twice and counts once. The final ranking is Ada (17 points), then Lin (15 points). The demo runs without network access.
+
+## How to run the live assignment
 
 You need Java 11 or higher installed.
 
@@ -30,7 +41,7 @@ The program will take about 50 seconds to run because of the 5 second delays bet
 
 The API might send the same event in multiple polls. For example, "Alice scored 10 in Round 1" could show up in poll 0 and again in poll 3. If we just add them up blindly, we'd count Alice's score twice.
 
-To fix this, I use a `HashSet` with a key made from `roundId_participant`. Before adding any event's score, I check if we've already seen that combination. If yes, I skip it.
+For each round, a `HashSet` tracks participants whose scores have already been counted. The first event for each round and participant counts. Participants with equal totals are ordered by name.
 
 ## Tech used
 
